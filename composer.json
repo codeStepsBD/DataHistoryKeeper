@@ -13,6 +13,6 @@
             "email": "mdarifbinaaziz@gmail.com"
         }
     ],
-    "minimum-stability": "beta",
+    "minimum-stability": "0.1.0",
     "require": {}
 }
