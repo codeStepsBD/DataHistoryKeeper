@@ -208,7 +208,7 @@ class HistoryKeeperRepository
 
         $cols = DB::table(DB::raw('information_schema.COLUMNS'))
             ->selectRaw("column_name column_name, column_type column_type, column_default column_default, is_nullable is_nullable, ordinal_position ordinal_position")
-            ->selectRaw("(SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS AS c2 WHERE lower(c2.table_name) = lower('$tableName') AND c2.ordinal_position = information_schema.COLUMNS.ordinal_position - 1) AS prev_column")
+            ->selectRaw("(SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS AS c2 WHERE lower(c2.table_name) = lower('$tableName') AND c2.ordinal_position = information_schema.COLUMNS.ordinal_position - 1 and lower(column_name) in ($dbColNames)) AS prev_column")
             ->whereRaw("lower(table_name) = lower('$tableName')")
             ->whereRaw("lower(column_name) in ($dbColNames)")
             ->get();
@@ -229,13 +229,12 @@ class HistoryKeeperRepository
     function addColumnInMySql($baseTable, $missingColumnList)
     {
         $colsDesc = $this->getMySqlTableColumnsDesc($baseTable, $missingColumnList);
-        $tableConfig = $this->allow_hist_table->where("base_table", $baseTable)->first();
-
-        if (!isset($tableConfig) || !isset($tableConfig['his_table'])) {
+        $tableConfig = $this->allow_hist_table->where("table_name", $baseTable)->first();
+        if (!isset($tableConfig)) {
             echo "$baseTable or his_table in array config not found.";
             exit(0);
         }
-        $historyTableName = $tableConfig['his_table'];
+        $historyTableName = $tableConfig["table_name"]. "_history";
 
         foreach ($colsDesc as $colDesc) {
 
