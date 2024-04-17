@@ -25,6 +25,8 @@ class HistoryKeeperServiceProvider extends ServiceProvider
     public function register()
     {
 
+        $this->mergeConfigFrom(__DIR__."/../../config/historyKeeper.php","historyKeeper");
+
         $routeFilePath = __DIR__."/../../routes/web.php";
         $this->loadRoutesFrom($routeFilePath);
 
