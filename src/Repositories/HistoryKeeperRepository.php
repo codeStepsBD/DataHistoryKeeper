@@ -343,4 +343,17 @@ class HistoryKeeperRepository
         return $columnName;
 
     }
+
+    private function getTableList():array{
+
+        $this->initDBOwnerOrSchema();
+
+        $tableNames = DB::select(DB::raw("SELECT table_name FROM information_schema.tables WHERE table_schema = '".$this->mysql_table_schema."' AND table_type = 'BASE TABLE'"));
+
+        $finalTableNameList = [];
+        foreach ($tableNames as $tableName){
+            $finalTableNameList[] = $tableName->table_name;
+        }
+        return $finalTableNameList;
+    }
 }
