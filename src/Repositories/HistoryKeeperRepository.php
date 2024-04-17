@@ -4,8 +4,10 @@ namespace CodeStepsBD\HistoryKeeper\Repositories;
 
 use CodeStepsBD\HistoryKeeper\Models\TableHistoryWithSettings;
 use Illuminate\Console\OutputStyle;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Termwind\Components\Raw;
 
 class HistoryKeeperRepository
 {
@@ -344,16 +346,14 @@ class HistoryKeeperRepository
 
     }
 
-    private function getTableList():array{
+    public function getTableList(): Collection
+    {
 
         $this->initDBOwnerOrSchema();
 
-        $tableNames = DB::select(DB::raw("SELECT table_name FROM information_schema.tables WHERE table_schema = '".$this->mysql_table_schema."' AND table_type = 'BASE TABLE'"));
-
-        $finalTableNameList = [];
-        foreach ($tableNames as $tableName){
-            $finalTableNameList[] = $tableName->table_name;
-        }
-        return $finalTableNameList;
+        $tableNames = DB::table(DB::Raw('information_schema.tables'))
+            ->select("table_name as table_name")
+            ->whereRaw(" table_schema = '".$this->mysql_table_schema."' AND table_type = 'BASE TABLE'")->get()->pluck('table_name');
+        return $tableNames;
     }
 }
