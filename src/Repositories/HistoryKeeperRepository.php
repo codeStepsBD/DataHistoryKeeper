@@ -75,7 +75,8 @@ class HistoryKeeperRepository
             if ($this->scanMismatch == false) {
                 $this->addMissingColumnInHistoryTable($baseTable, $main_tbl_differences);
             } else {
-                echo "Column mismatch found between $baseTable and $historyTable. $baseTable table has -  " . implode(", ", $main_tbl_differences) . "\n\n";
+                echo "Column mismatch found between <strong>$baseTable</strong> and <strong>$historyTable</strong>. " . PHP_EOL;
+                echo "Missing column(s) in <strong>$historyTable</strong>  -  <span style='color: red;'>" . implode(", ", $main_tbl_differences) ."</span>" . PHP_EOL . PHP_EOL;
             }
         }
 
@@ -179,7 +180,7 @@ class HistoryKeeperRepository
             $sql .= " and lower(column_name) = lower('$columnName') ";
         }
         $sql .= "ORDER BY ordinal_position ASC";
-        echo $sql;
+        #echo $sql;
         return DB::select($sql);
     }
 

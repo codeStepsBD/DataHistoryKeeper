@@ -36,7 +36,7 @@ class UpdateHistoryTableAndTrigger extends Command
             $historyKeeperRepo->runTest = true;
         }
 
-        if ($this->option('makeNewHistoryTable')) {
+        if ($this->option('makeNewHistoryTable')=='true') {
             $historyKeeperRepo->dropExistHistoryTable = true;
         }
 
