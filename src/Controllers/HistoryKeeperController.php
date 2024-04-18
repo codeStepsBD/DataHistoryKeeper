@@ -22,6 +22,7 @@ class HistoryKeeperController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
         $tables = $request->input('tables');
         foreach($tables as $table){
             $data = [
