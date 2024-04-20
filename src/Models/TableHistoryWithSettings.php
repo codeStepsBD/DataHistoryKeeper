@@ -8,5 +8,5 @@ class TableHistoryWithSettings extends Model
 {
     public $connection = "mysql";
     protected $table = "table_history_with_settings";
-    protected $fillable = ['table_name'];
+    protected $fillable = ['table_name','insert_trigger','update_trigger','delete_trigger'];
 }

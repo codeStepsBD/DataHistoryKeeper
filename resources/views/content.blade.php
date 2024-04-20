@@ -29,13 +29,12 @@
             <table>
                 @foreach($tableList as $key=>$table)
                     <tr>
-                        <td><input type="checkbox" name="tables[{{$key}}][]" value="{{$table}}"> {{$table}}</td>
+                        <td><input type="checkbox" name="tables[{{$key}}][table_name]" value="{{$table}}"> {{$table}}</td>
                         <td>
                             <div>
-                                <input type="hidden" id="status_1_" name="tables[{{$key}}][]"  value="0">
-                                <input type="checkbox" name="tables[{{$key}}][]" value="0" id="insert_trigger"><label for="insert_trigger">Insert Trigger</label>
-                                <input type="checkbox" name="tables[{{$key}}][]" value="0" id="update_trigger"><label for="update_trigger">Update Trigger</label>
-                                <input type="checkbox" name="tables[{{$key}}][]" value="0" id="delete_trigger"><label for="delete_trigger">Delete Trigger</label>
+                                <input type="checkbox" name="tables[{{$key}}][insert_trigger]" value="1" id="insert_trigger"><label for="insert_trigger">Insert Trigger</label>
+                                <input type="checkbox" name="tables[{{$key}}][update_trigger]" value="1" id="update_trigger"><label for="update_trigger">Update Trigger</label>
+                                <input type="checkbox" name="tables[{{$key}}][delete_trigger]" value="1" id="delete_trigger"><label for="delete_trigger">Delete Trigger</label>
                             </div>
                         </td>
                     </tr>
