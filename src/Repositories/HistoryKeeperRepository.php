@@ -356,4 +356,18 @@ class HistoryKeeperRepository
             ->whereRaw(" table_schema = '".$this->mysql_table_schema."' AND table_type = 'BASE TABLE'")->get()->pluck('table_name');
         return $tableNames;
     }
+
+    public function edit($id)
+    {
+        return TableHistoryWithSettings::findOrFail($id);
+    }
+    public function update( $request,$id )
+    {
+        $data = TableHistoryWithSettings::find($id);
+        $data->table_name = $request['tables']['table_name'];
+        $data->insert_trigger = $request['tables']['insert_trigger'] ?? 0;
+        $data->update_trigger = $request['tables']['update_trigger'] ?? 0;
+        $data->delete_trigger = $request['tables']['delete_trigger'] ?? 0;
+        return $data->save();
+    }
 }

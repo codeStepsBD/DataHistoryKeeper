@@ -42,4 +42,12 @@ class HistoryKeeperController extends Controller
         }
         return redirect()->back()->with('success', 'your message,here');
     }
+    public function edit($id){
+        $data = $this->historyKeeperRepository->edit($id);
+        return view(view: "historyKeeper::historyTableEdit",data:['data'=>$data]);
+    }
+    public function update(Request $request,$id){
+        $data = $this->historyKeeperRepository->update($request,$id);
+        return redirect()->route('history.table.edit',$id);
+    }
 }
