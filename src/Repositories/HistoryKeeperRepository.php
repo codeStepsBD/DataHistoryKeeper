@@ -210,7 +210,7 @@ class HistoryKeeperRepository
             return "'" . strtolower($f) . "'";
         })->toArray();
         $dbColNames = implode(',', $columnsName);
-        dump($tableName, $dbColNames);
+
         $cols = DB::table(DB::raw('information_schema.COLUMNS'))
             ->selectRaw("column_name column_name, column_type column_type, column_default column_default, is_nullable is_nullable, ordinal_position ordinal_position")
             ->selectRaw("(SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS AS c2 WHERE lower(c2.table_name) = lower('$tableName') AND c2.ordinal_position = information_schema.COLUMNS.ordinal_position - 1 and lower(TABLE_SCHEMA) = lower('{$this->mysql_table_schema}')) AS prev_column")
