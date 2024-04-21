@@ -205,14 +205,15 @@ class HistoryKeeperRepository
             return "'" . strtolower($f) . "'";
         })->toArray();
         $dbColNames = implode(',', $columnsName);
-
+        dump($tableName, $dbColNames);
         $cols = DB::table(DB::raw('information_schema.COLUMNS'))
             ->selectRaw("column_name column_name, column_type column_type, column_default column_default, is_nullable is_nullable, ordinal_position ordinal_position")
-            ->selectRaw("(SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS AS c2 WHERE lower(c2.table_name) = lower('$tableName') AND c2.ordinal_position = information_schema.COLUMNS.ordinal_position - 1 and lower(column_name) in ($dbColNames)) AS prev_column")
+            ->selectRaw("(SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS AS c2 WHERE lower(c2.table_name) = lower('$tableName') AND c2.ordinal_position = information_schema.COLUMNS.ordinal_position - 1 and lower(TABLE_SCHEMA) = lower('{$this->mysql_table_schema}')) AS prev_column")
             ->whereRaw("lower(table_name) = lower('$tableName')")
             ->whereRaw("lower(column_name) in ($dbColNames)")
             ->whereRaw("lower(TABLE_SCHEMA) = lower('{$this->mysql_table_schema}')")
-            ->dd();
+            ->orderBy('ordinal_position')
+            ->get();
 
         if ($cols->count() == 0) {
             echo "$dbColNames not found in table- `$tableName` ";
@@ -340,7 +341,7 @@ class HistoryKeeperRepository
     {
 
         $columnName = strtolower($columnName);
-        if (in_array($columnName, $this->mysql_reserved_key)) {
+        if (in_array($columnName, $this->mysql_reserved_key) || str_contains($columnName," ")) {
             return "`$columnName`";
         }
         return $columnName;
