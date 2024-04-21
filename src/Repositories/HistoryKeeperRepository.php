@@ -358,7 +358,7 @@ class HistoryKeeperRepository
             ->whereRaw(" table_schema = '".$this->mysql_table_schema."' AND table_type = 'BASE TABLE'")
             ->whereNotIn('table_name',[...$excludeTableNames,  ...$this->getSkipTableList()])
             ->where('table_name','not like','%_history')
-//            ->whereIn('table_name', [...$this->getMustAddTableList()]);
+            ->orWhereIn('table_name', [...$this->getMustAddTableList()])
             ->get()->pluck('table_name');
         return $tableNames;
     }
