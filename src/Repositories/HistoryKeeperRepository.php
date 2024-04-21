@@ -211,7 +211,8 @@ class HistoryKeeperRepository
             ->selectRaw("(SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS AS c2 WHERE lower(c2.table_name) = lower('$tableName') AND c2.ordinal_position = information_schema.COLUMNS.ordinal_position - 1 and lower(column_name) in ($dbColNames)) AS prev_column")
             ->whereRaw("lower(table_name) = lower('$tableName')")
             ->whereRaw("lower(column_name) in ($dbColNames)")
-            ->get();
+            ->whereRaw("lower(TABLE_SCHEMA) = lower('{$this->mysql_table_schema}')")
+            ->dd();
 
         if ($cols->count() == 0) {
             echo "$dbColNames not found in table- `$tableName` ";
@@ -346,14 +347,16 @@ class HistoryKeeperRepository
 
     }
 
-    public function getTableList(): Collection
+    public function getTableList(array $excludeTableNames): Collection
     {
 
         $this->initDBOwnerOrSchema();
 
         $tableNames = DB::table(DB::Raw('information_schema.tables'))
             ->select("table_name as table_name")
-            ->whereRaw(" table_schema = '".$this->mysql_table_schema."' AND table_type = 'BASE TABLE'")->get()->pluck('table_name');
+            ->whereRaw(" table_schema = '".$this->mysql_table_schema."' AND table_type = 'BASE TABLE'")
+            ->whereNotIn('table_name',$excludeTableNames)
+            ->get()->pluck('table_name');
         return $tableNames;
     }
 

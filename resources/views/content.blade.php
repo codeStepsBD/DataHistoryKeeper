@@ -25,22 +25,47 @@
     </style>
     <div>
         <h1>Create History Table List</h1>
+        @dump(session()->all())
+        @if(session()->has('success'))
+            {{ session()->get('success') }}
+        @endif
+        @if (isset($errors) && $errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form method="post" action="{{ route('table.store') }}">
             <table>
-                @foreach($tableList as $key=>$table)
+                @foreach($tableList as $table )
+                    @php(extract(['table' => $table['table_name'], 'insert_trigger'=>$table['insert_trigger'], 'update_trigger'=>$table['update_trigger'], 'delete_trigger' =>$table['delete_trigger']]))
+
                     <tr>
-                        <td><input type="checkbox" name="tables[{{$key}}][table_name]" value="{{$table}}"> {{$table}}</td>
+                        <td>
+                            <input type="hidden" name="tablename[{{$table}}]" value="{{$table}}">
+                            <label>{{$table}}</label> </td>
                         <td>
                             <div>
-                                <input type="checkbox" name="tables[{{$key}}][insert_trigger]" value="1" id="insert_trigger"><label for="insert_trigger">Insert Trigger</label>
-                                <input type="checkbox" name="tables[{{$key}}][update_trigger]" value="1" id="update_trigger"><label for="update_trigger">Update Trigger</label>
-                                <input type="checkbox" name="tables[{{$key}}][delete_trigger]" value="1" id="delete_trigger"><label for="delete_trigger">Delete Trigger</label>
+                                <input type="hidden" name="insert_trigger[{{$table}}]" value="0">
+                                <input type="checkbox" name="insert_trigger[{{$table}}]" value="1" @if($insert_trigger==1)checked="checked" @endif id="insert_trigger_{{$table}}"><label for="insert_trigger_{{$table}}">Insert Trigger</label>
+
+
+                                <input type="hidden" name="update_trigger[{{$table}}]" value="0">
+                                <input type="checkbox" name="update_trigger[{{$table}}]" value="1"  @if($update_trigger==1)checked="checked" @endif  id="update_trigger_{{$table}}"><label for="update_trigger_{{$table}}">Update Trigger</label>
+
+
+
+                                <input type="hidden" name="delete_trigger[{{$table}}]" value="0">
+                                <input type="checkbox" name="delete_trigger[{{$table}}]" value="1"  @if($delete_trigger==1)checked="checked" @endif  id="delete_trigger_{{$table}}"><label for="delete_trigger_{{$table}}">Delete Trigger</label>
                             </div>
                         </td>
                     </tr>
                 @endforeach
             </table>
-            <input type="submit">
+            <input type="submit" value="Save Changes">
         </form>
     </div>
 @stop
