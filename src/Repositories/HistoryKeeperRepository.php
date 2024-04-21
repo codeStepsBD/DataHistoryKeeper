@@ -39,8 +39,10 @@ class HistoryKeeperRepository
         $this->calling_from_command = true;
 
         foreach ($this->allow_hist_table as $table) {
-            $this->processTable((array)$table);
-            $progressBar->advance();
+            if ( $table['insert_trigger'] || $table['update_trigger'] || $table['delete_trigger']) {
+                $this->processTable((array)$table);
+                $progressBar->advance();
+            }
         }
         $progressBar->finish();
         echo ("\n Congratulations! You have successfully done it");
@@ -48,6 +50,8 @@ class HistoryKeeperRepository
 
     function processTable(array $table)
     {
+
+
         $historyTableNewlyCreated = false;
 
         $baseTable = $table["table_name"];
@@ -85,18 +89,19 @@ class HistoryKeeperRepository
         if (count($his_tbl_differences) > 2 && $this->dropExistHistoryTable == false && $historyTableNewlyCreated == false) {
             echo "Column mismatch found between $baseTable and $historyTable. $historyTable table has -  " . implode(", ", $his_tbl_differences) . "\n\n";
         }
+        if ( $table['insert_trigger'] || $table['update_trigger'] || $table['delete_trigger']) {
+            if (!$this->scanMismatch) {
+                if ($table["insert_trigger"] == 1) {
+                    $this->createOrUpdateInsertTrigger($baseTable, $historyTable);
+                }
 
-        if (!$this->scanMismatch) {
-            if ($table["insert_trigger"] == 1) {
-                $this->createOrUpdateInsertTrigger($baseTable, $historyTable);
-            }
+                if ($table["update_trigger"] == 1) {
+                    $this->createOrUpdateUpdateTrigger($baseTable, $historyTable);
+                }
 
-            if ($table["update_trigger"] == 1) {
-                $this->createOrUpdateUpdateTrigger($baseTable, $historyTable);
-            }
-
-            if ($table["delete_trigger"] == 1) {
-                $this->createOrUpdateDeleteTrigger($baseTable, $historyTable);
+                if ($table["delete_trigger"] == 1) {
+                    $this->createOrUpdateDeleteTrigger($baseTable, $historyTable);
+                }
             }
         }
 
