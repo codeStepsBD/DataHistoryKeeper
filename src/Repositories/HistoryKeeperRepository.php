@@ -355,7 +355,9 @@ class HistoryKeeperRepository
         $tableNames = DB::table(DB::Raw('information_schema.tables'))
             ->select("table_name as table_name")
             ->whereRaw(" table_schema = '".$this->mysql_table_schema."' AND table_type = 'BASE TABLE'")
-            ->whereNotIn('table_name',$excludeTableNames)
+            ->whereNotIn('table_name',[...$excludeTableNames,  ...$this->getSkipTableList()])
+            ->where('table_name','not like','%_history')
+//            ->whereIn('table_name', [...$this->getMustAddTableList()]);
             ->get()->pluck('table_name');
         return $tableNames;
     }
@@ -372,5 +374,13 @@ class HistoryKeeperRepository
         $data->update_trigger = $request['tables']['update_trigger'] ?? 0;
         $data->delete_trigger = $request['tables']['delete_trigger'] ?? 0;
         return $data->save();
+    }
+
+    public function getSkipTableList(): array {
+        return config("historyKeeper.skipTables");
+    }
+
+    public function getMustAddTableList(): array {
+        return config("historyKeeper.mustAddTables");
     }
 }

@@ -20,6 +20,7 @@ class HistoryKeeperController extends Controller
     }
 
     public function index(Request $request){
+
         /**
          * @var $insertedTable Collection
          */
