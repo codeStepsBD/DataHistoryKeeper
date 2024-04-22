@@ -7,7 +7,6 @@ use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Termwind\Components\Raw;
 
 class HistoryKeeperRepository
 {
@@ -33,18 +32,22 @@ class HistoryKeeperRepository
             $this->generateTestDataAndTestHistoryTable();
             return;
         }
-
-        $progressBar = $this->output->createProgressBar($this->allow_hist_table->count());
-
+        if (app()->runningInConsole()){
+            $progressBar = $this->output->createProgressBar($this->allow_hist_table->count());
+        }
         $this->calling_from_command = true;
 
         foreach ($this->allow_hist_table as $table) {
             if ( $table['insert_trigger'] || $table['update_trigger'] || $table['delete_trigger']) {
                 $this->processTable((array)$table);
-                $progressBar->advance();
+                if (app()->runningInConsole()){
+                    $progressBar->advance();
+                }
             }
         }
-        $progressBar->finish();
+        if (app()->runningInConsole()){
+            $progressBar->finish();
+        }
         echo ("\n Congratulations! You have successfully done it");
     }
 
@@ -82,7 +85,9 @@ class HistoryKeeperRepository
                 $this->addMissingColumnInHistoryTable($baseTable, $main_tbl_differences);
             } else {
                 echo "Column mismatch found between <strong>$baseTable</strong> and <strong>$historyTable</strong>. " . PHP_EOL;
+                echo (app()->runningInConsole()) ? "\n" : "<br>";
                 echo "Missing column(s) in <strong>$historyTable</strong>  -  <span style='color: red;'>" . implode(", ", $main_tbl_differences) ."</span>" . PHP_EOL . PHP_EOL;
+                echo (app()->runningInConsole()) ? "\n" : "<br>";
             }
         }
 
@@ -119,7 +124,8 @@ class HistoryKeeperRepository
                 )"
         );
 
-        echo("\n table $historyTable created");
+        echo("\n Table $historyTable created");
+        echo (app()->runningInConsole()) ? "\n" : "<br>";
     }
 
 
