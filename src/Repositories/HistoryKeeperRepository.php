@@ -148,7 +148,7 @@ class HistoryKeeperRepository
 
         DB::unprepared("DROP TRIGGER IF EXISTS {$baseTableName}_his_on_update");
         $pl = "
-            CREATE TRIGGER {$baseTableName}_his_on_update BEFORE UPDATE ON {$baseTableName}
+            CREATE TRIGGER {$baseTableName}_his_on_update AFTER UPDATE ON {$baseTableName}
             FOR EACH ROW
             BEGIN
                 INSERT INTO {$historyTableName}
