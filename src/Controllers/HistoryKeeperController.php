@@ -55,6 +55,7 @@ class HistoryKeeperController extends Controller
         TableHistoryWithSettings::truncate();
 
         foreach($tables as $key=>$tablename){
+
             $data = [
                 'table_name' => $tablename,
                 'insert_trigger' => $request->insert_trigger[$tablename],
