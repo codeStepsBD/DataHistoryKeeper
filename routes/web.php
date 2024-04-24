@@ -10,5 +10,5 @@ Route::prefix('history-keeper')->middleware(config("historyKeeper.middleware"))-
     Route::post('/update/{id}', [\CodeStepsBD\HistoryKeeper\Controllers\HistoryKeeperController::class,'update'])->name('history.table.update');
 
 
-    Route::get('/url-command/{value?}', [\CodeStepsBD\HistoryKeeper\Controllers\HistoryTableCommandUrlController::class,'commandUrl']);
+    Route::get('/url-command/{value?}', [\CodeStepsBD\HistoryKeeper\Controllers\HistoryTableCommandUrlController::class,'commandUrl'])->name("commandUrl");
 });
