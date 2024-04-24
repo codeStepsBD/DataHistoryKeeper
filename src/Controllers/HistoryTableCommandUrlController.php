@@ -21,6 +21,10 @@ class HistoryTableCommandUrlController extends Controller
 
     public function commandUrl($value=false)
     {
+        if (!$value){
+            return view(view: "historyKeeper::manual-command-run");
+        }
+
         if ($value == 'runTest') {
             $this->historyKeeperRepository->runTest = true;
         }
