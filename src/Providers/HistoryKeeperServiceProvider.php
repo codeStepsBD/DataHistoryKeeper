@@ -7,6 +7,7 @@ namespace CodeStepsBD\HistoryKeeper\Providers;
 use App\Models\User;
 use CodeStepsBD\HistoryKeeper\Console\Commands\UpdateHistoryTableAndTrigger;
 use CodeStepsBD\HistoryKeeper\Models\TableHistoryWithSettings;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class HistoryKeeperServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class HistoryKeeperServiceProvider extends ServiceProvider
                 ],
             );
         }
+        Paginator::useBootstrap();
     }
 
     public function register()

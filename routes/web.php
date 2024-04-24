@@ -11,4 +11,7 @@ Route::prefix('history-keeper')->middleware(config("historyKeeper.middleware"))-
 
 
     Route::get('/url-command/{value?}', [\CodeStepsBD\HistoryKeeper\Controllers\HistoryTableCommandUrlController::class,'commandUrl']);
+
+    Route::get('/history-table-data/', [\CodeStepsBD\HistoryKeeper\Controllers\HistoryTableDataShowController::class,'index'])->name('history-table-data-show');
+    Route::post('/history-table-data-delete/', [\CodeStepsBD\HistoryKeeper\Controllers\HistoryTableDataShowController::class,'delete'])->name('history-table-data-delete');
 });
