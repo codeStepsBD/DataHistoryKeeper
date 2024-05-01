@@ -24,7 +24,7 @@ class HistoryKeeperController extends Controller
         /**
          * @var $insertedTable Collection
          */
-        $insertedTable = collect(TableHistoryWithSettings::get(['table_name', 'insert_trigger', 'update_trigger','delete_trigger'])->toArray());
+        $insertedTable = collect(TableHistoryWithSettings::get(['id', 'table_name', 'insert_trigger', 'update_trigger','delete_trigger'])->toArray());
 
         $excludeTableList = $insertedTable->pluck('table_name')->toArray();
 
@@ -33,8 +33,7 @@ class HistoryKeeperController extends Controller
 
         $insertedTable = $insertedTable->merge($newTableCollectionNotUsedForHistory);
 
-//        dd($insertedTable);
-        return view(view: "historyKeeper::content",data:['tableList'=>$insertedTable->sortBy('table_name')]);
+        return view(view: "historyKeeper::configuration.create",data:['tableList'=>$insertedTable->sortBy('table_name')]);
     }
 
     public function store(Request $request)
@@ -69,10 +68,11 @@ class HistoryKeeperController extends Controller
     }
     public function edit($id){
         $data = $this->historyKeeperRepository->edit($id);
-        return view(view: "historyKeeper::historyTableEdit",data:['data'=>$data]);
+        return view(view: "historyKeeper::configuration.edit",data:['data'=>$data]);
     }
+    
     public function update(Request $request,$id){
         $data = $this->historyKeeperRepository->update($request,$id);
-        return redirect()->route('history.table.edit',$id);
+        return redirect()->route('history-keeper.configuration.edit',$id);
     }
 }

@@ -1,6 +1,5 @@
 @extends('historyKeeper::layouts')
 @section('content')
-<div class="container mt-3 table-responsive">
     <div class="row">
         <div class="col-md-6">
             <form action="" method="GET">
@@ -30,7 +29,7 @@
             </form>
         </div>
         <div class="col-md-6">
-            <form action="{{ route('history-table-data-delete') }}" method="post">
+            <form action="{{ route('history-keeper.trash') }}" method="post">
                 <div class="row">
                     <input type="hidden" value="{{ Request::url() }}" name="url">
                     <div class="col-md-5 mb-4">
@@ -87,7 +86,6 @@
             {!! $dataList->links() !!}
         </div>
     @endif
-</div>
 @push('custom-scripts')
     <script type="text/javascript">
         $(document).ready(function (){
