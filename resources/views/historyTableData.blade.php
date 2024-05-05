@@ -9,7 +9,8 @@
                             <option value="">Select Table</option>
                             @if($historyTableList)
                                 @foreach($historyTableList as $item)
-                                    <option {{ Request::get('table') == $item ? 'selected' : '' }} value="{{$item}}">{{$item}}</option>
+
+                                    <option {{ Request::has('table') && Request::get('table')== $item['table_name'] ? 'selected' : '' }} value="{{$item['table_name']}}">{{$item['table_name']}}</option>
                                 @endforeach
                             @endif
                         </select>

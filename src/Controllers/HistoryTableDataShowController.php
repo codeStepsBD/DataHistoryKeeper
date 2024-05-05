@@ -28,7 +28,7 @@ class HistoryTableDataShowController extends Controller
     {
        $table =  $request->input("table");
        $per_page =  $request->input("per_page");
-        $historyTables = $this->historyTableDataShow->getTableList();
+        $historyTables = collect(TableHistoryWithSettings::get(['id', 'table_name', 'insert_trigger', 'update_trigger','delete_trigger'])->toArray());
         if (!$table){
             $columns = [];
             $data = [];

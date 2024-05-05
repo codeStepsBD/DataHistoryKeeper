@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use function MongoDB\BSON\toJSON;
 
 class HistoryKeeperController extends Controller
 {
@@ -61,18 +62,11 @@ class HistoryKeeperController extends Controller
                 'update_trigger' => $request->update_trigger[$tablename],
                 'delete_trigger' => $request->delete_trigger[$tablename],
             ];
+
             TableHistoryWithSettings::create($data);
 
         }
         return back()->with(['success'=>'your message,here']);
     }
-    public function edit($id){
-        $data = $this->historyKeeperRepository->edit($id);
-        return view(view: "historyKeeper::configuration.edit",data:['data'=>$data]);
-    }
-    
-    public function update(Request $request,$id){
-        $data = $this->historyKeeperRepository->update($request,$id);
-        return redirect()->route('history-keeper.configuration.edit',$id);
-    }
+
 }
