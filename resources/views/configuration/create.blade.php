@@ -1,13 +1,14 @@
 @extends('historyKeeper::layouts')
 @section('content')
-<h1 class="h4">Configuration History Keeper</h1>
+<h1 class=" h5 page-title">Configuration History Keeper</h1>
 <form method="post" action="{{ route('history-keeper.configuration.store') }}">
-    <table class="table">
-        <tr>
-            <th>Table Name</th>
-            <th colspan="3">Triggers</th>
-            <th class="text-end">Action</th>
-        </tr>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Table Name</th>
+                <th colspan="3">Triggers</th>
+            </tr>
+        </thead>
         @forelse ($tableList as $table)
             @php(extract(['table_name' => $table['table_name'], 'insert_trigger'=>$table['insert_trigger'], 'update_trigger'=>$table['update_trigger'], 'delete_trigger' =>$table['delete_trigger']]))
             <tr>
@@ -41,7 +42,7 @@
             <tr><td>No Table found !</td></tr>
         @endforelse
     </table>
-    <input type="submit" class="btn btn-success" value="Save Changes">
+    <input type="submit" class="btn btn-dark" value="Save Changes">
 </form>
 @stop
 

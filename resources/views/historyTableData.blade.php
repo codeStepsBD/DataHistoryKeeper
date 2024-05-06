@@ -24,7 +24,7 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-secondary">Submit</button>
                     </div>
                 </div>
             </form>
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn btn-secondary">Submit</button>
                     </div>
                 </div>
             </form>
@@ -52,36 +52,37 @@
     </div>
     @if($dataList)
         <div class="row">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    @foreach($columns as $column)
-                        <th scope="col" width="1%">{{$column}}</th>
-                    @endforeach
-                </tr>
-                </thead>
-                <tbody>
-                @if($dataList->total() > 0)
-                    @foreach($dataList as $item)
-
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
                         <tr>
                             @foreach($columns as $column)
-                                <td>{{$item->{$column} }}</td>
+                                <th scope="col" width="1%">{{$column}}</th>
                             @endforeach
-
                         </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="{{count($columns)}}">
-                            <div class="alert alert-primary p-2 text-center" role="alert">
-                                Data is not available
-                            </div>
-                        </td>
-                    </tr>
-                @endif
+                    </thead>
+                <tbody>
+                    @if($dataList->total() > 0)
+                        @foreach($dataList as $item)
+                            <tr>
+                                @foreach($columns as $column)
+                                    <td>{{$item->{$column} }}</td>
+                                @endforeach
+
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="{{count($columns)}}">
+                                <div class="alert alert-primary p-2 text-center" role="alert">
+                                    Data is not available
+                                </div>
+                            </td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
+            </div>
         </div>
         <div class="d-flex">
             {!! $dataList->links() !!}
